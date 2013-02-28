@@ -46,7 +46,7 @@ def eucDist(x1, y1, x2, y2):
 
 def nearestVertex(x, y):
     # 100 degrees is arbitrarily large, no such distance possible
-    dist = 100
+    dist = float("inf")
     for v in vertices.items(): # look through the vertices for a match
         if eucDist(x, y, v[1][0], v[1][1]) < dist: # search for the closest
             closest = v[0] # analogous to "min"
@@ -54,6 +54,8 @@ def nearestVertex(x, y):
     return closest
 
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
     
     # Read text file into python
     infile = open("edmonton-roads-digraph.txt", "r")
@@ -75,6 +77,7 @@ if __name__ == "__main__":
             start = int(start)
             edges.append((start, stop, name)) # put name param. in our edges
             digraphEdges.append((start, stop)) # exclude name for the digraph
+
         if type == "V": # the type is a vertex
             (name, lon, lat) = fields # the fields of a vertex given by the vid
             # or vertex id, as an integer and lon and lat in degrees as floats
