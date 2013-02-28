@@ -1,35 +1,6 @@
 import digraph
 
 
-# Read text file into python
-infile = open("edmonton-roads-digraph.txt", "r")
-vertices = {}
-edges = []
-#edges holds edges plus street names
-#digraphEdges hold edges suitable for digraph
-digraphEdges = []
-for line in infile: # remove the endline character
-    line = line.rstrip() # split the parameters of the csv
-    fields = line.split(",")
-    
-    type = fields.pop(0) # vertex or edge indicator (hopefully)
-
-    if type == "E": # the type is an edge
-        (start, stop, name) = fields # remaining unpopped fields
-        name = name.strip('"') # remove the quotes from the name field
-        stop = int(stop) # integer-ize the stop and start fields; 
-        start = int(start)
-        edges.append((start, stop, name)) # put the name param. in our edges
-        digraphEdges.append((start, stop)) # exclude the name for the digraph
-    if type == "V": # the type is a vertex
-        (name, lon, lat) = fields # the fields of a vertex given by the vid, or
-        # vertex id, as an integer and lon and lat in degrees as floats
-        # multiply by 100000 to turn degrees into 100000ths
-        vertices[int(name)] = [int(float(lon)*100000), int(float(lat)*100000)]
-
-# make a digraph of our digraph edges, vertices will be filled in automatically
-edmonton = digraph.Digraph(digraphEdges) 
-
 def edgecost(e):
     '''
     edge cost function for an edge composed of two vertices; returns the 
@@ -83,6 +54,37 @@ def nearestVertex(x, y):
     return closest
 
 if __name__ == "__main__":
+    
+    # Read text file into python
+    infile = open("edmonton-roads-digraph.txt", "r")
+    vertices = {}
+    edges = []
+    # edges holds edges plus street names
+    # digraphEdges hold edges suitable for digraph
+    digraphEdges = []
+    for line in infile: # remove the endline character
+        line = line.rstrip() # split the parameters of the csv
+        fields = line.split(",")
+    
+        type = fields.pop(0) # vertex or edge indicator (hopefully)
+
+        if type == "E": # the type is an edge
+            (start, stop, name) = fields # remaining unpopped fields
+            name = name.strip('"') # remove the quotes from the name field
+            stop = int(stop) # integer-ize the stop and start fields; 
+            start = int(start)
+            edges.append((start, stop, name)) # put name param. in our edges
+            digraphEdges.append((start, stop)) # exclude name for the digraph
+        if type == "V": # the type is a vertex
+            (name, lon, lat) = fields # the fields of a vertex given by the vid
+            # or vertex id, as an integer and lon and lat in degrees as floats
+            # multiply by 100000 to turn degrees into 100000ths
+            vertices[int(name)] = [int(float(lon)*100000), 
+                                   int(float(lat)*100000)]
+
+    # make a digraph of digraph edges, vertices will be filled in automatically
+    edmonton = digraph.Digraph(digraphEdges) 
+
     # Code for processing route finding requests here
     while 1: # continuously wait for input
         trip = input('Awaiting input:').split(" ")
