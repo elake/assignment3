@@ -1,6 +1,5 @@
 import digraph
 
-
 # Read text file into python
 infile = open("edmonton-roads-digraph.txt", "r")
 vertices = {}
@@ -9,32 +8,44 @@ edges = []
 #digraphEdges hold edges suitable for digraph
 digraphEdges = []
 for line in infile:
-    line = line.rstrip()
-    fields = line.split(",")
+    line = line.rstrip() # remove the endline character
+    fields = line.split(",") # split the parameters of the csv
     
-    type = fields.pop(0)
+    type = fields.pop(0) # vertex or edge indicator (hopefully)
 
-    if type == "E":
-        (start, stop, name) = fields
-        name = name.strip('"')
-        stop = int(stop)
+    if type == "E": # the type is an edge
+        (start, stop, name) = fields # remaining unpopped fields
+        name = name.strip('"') # remove the quotes from the name field
+        stop = int(stop) # integer-ize the stop and start fields; 
         start = int(start)
-        edges.append((start, stop, name))
-        digraphEdges.append((start, stop))
-    if type == "V":
-        (name, lon, lat) = fields
-        vertices[int(name)] = [float(lon),float(lat)]
+        edges.append((start, stop, name)) # put the name param. in our edges
+        digraphEdges.append((start, stop)) # exclude the name for the digraph
+
+    if type == "V": # the type is a vertex
+        (vid, lon, lat) = fields # the fields of a vertex given by the vid, or
+        # vertex id, as an integer and lon and lat in degrees as floats
+        vertices[int(vid)] = [float(lon),float(lat)] 
+
 edmonton = digraph.Digraph(digraphEdges)
 
-def edgecost(e):
+def edgecost(e): 
+    '''
+    edge cost function for an edge composed of two vertices; returns the 
+    Euclidean distance between the two vertices in 100,000ths of degrees
+    '''
     x1, y1 = vertices[e[0]]
     x2, y2 = vertices[e[1]]
     return eucDist(x1, y1, x2, y2)
 
 def least_cost_path(G, start, dest, cost):
+    '''
+    implementation of Dijkstra's algorithm, written in majority by Dr. Jim
+    Hoover though the path traceback was written by Eldon Lake
+    '''
     todo = {start: 0}
     parent = {}
     visited = set()
+
     while todo and dest not in visited:
         cur = min(todo, key=todo.get)
         c = todo[cur]
@@ -45,29 +56,33 @@ def least_cost_path(G, start, dest, cost):
             if n not in todo or ( c + cost((cur,n)) < todo[n] ):
                 todo[n] = c + cost((cur,n))
                 parent[n] = cur
-    if dest in visited:
-        path = []
-        while start not in path:
-            path.insert(0, parent[cur])
-            cur = parent[cur]
+
+    if dest in visited: # this means we found dest in the above search
+        path = [dest]   # include dest in path to start, work from its parent
+        while start not in path: 
+            path.insert(0, parent[cur]) # insert the parents at the beginning
+            cur = parent[cur] # ascend to the parent of cur
         return path
-    else:
-        return None     
+    else: # we did not find dest in our search, return None as specified
+        return None 
 
 def eucDist(x1, y1, x2, y2):
+    '''
+    Euclidean distance between (x1, y1) and (x2, y2)
+    '''
     cost = ((x1-x2)**2 + (y1-y2)**2)**0.5
     return cost
 
 def nearestVertex(x, y):
-    # 100 degrees is arbitrarily large
+    # 100 degrees is arbitrarily large, no such distance possible
     dist = 100
-    for v in vertices.items():
-        if eucDist(x, y, v[1][0], v[1][1]) < dist:
+    for v in vertices.items(): # look through the vertices for a match
+        if eucDist(x, y, v[1][0], v[1][1]) < dist: # search for the closest
             closest = v[0]
-            dist = eucDist(x, y, v[1][0], v[1][1])
+            dist = eucDist(x, y, v[1][0], v[1][1]) # analogous to "min"
     return closest
 
-while 1:
+while 1: 
     trip = input('Awaiting input:').split(" ")
     x1, y1, x2, y2 = trip
     least_cost_path(edmonton, nearestVertex(x1, y1),
