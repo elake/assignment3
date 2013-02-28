@@ -82,12 +82,14 @@ def nearestVertex(x, y):
             dist = eucDist(x, y, v[1][0], v[1][1]) 
     return closest
 
-while 1: # continuously wait for input
-    trip = input('Awaiting input:').split(" ")
-    x1, y1, x2, y2 = trip
-    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-    path = least_cost_path(edmonton, nearestVertex(x1, y1),
-                    nearestVertex(x2, y2), edgecost)
-    print(len(path))
-    for v in path:
-        print(vertices[v])
+if __name__ == "__main__":
+    # Code for processing route finding requests here
+    while 1: # continuously wait for input
+        trip = input('Awaiting input:').split(" ")
+        x1, y1, x2, y2 = trip
+        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+        path = least_cost_path(edmonton, nearestVertex(x1, y1),
+                        nearestVertex(x2, y2), edgecost)
+        print(len(path))
+        for v in path:
+            print(vertices[v])
