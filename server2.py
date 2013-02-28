@@ -18,6 +18,7 @@ def least_cost_path(G, start, dest, cost):
     todo = {start: 0}
     parent = {}
     visited = set()
+
     while todo and dest not in visited:
         cur = min(todo, key=todo.get)
         c = todo[cur]
@@ -28,12 +29,14 @@ def least_cost_path(G, start, dest, cost):
             if n not in todo or ( c + cost((cur,n)) < todo[n] ):
                 todo[n] = c + cost((cur,n))
                 parent[n] = cur
+
     if dest in visited: # this means we found dest in the above search
         path = [dest] # include dest in path to start, work from its parent
         while start not in path:
             path.insert(0, parent[cur]) # insert the parents at the beginning
             cur = parent[cur] # ascend to the parent of cur
         return path
+
     else: # we did not find dest in our search, return None as specified
         return None     
 
@@ -45,8 +48,7 @@ def eucDist(x1, y1, x2, y2):
     return cost
 
 def nearestVertex(x, y):
-    # 100 degrees is arbitrarily large, no such distance possible
-    dist = float("inf")
+    dist = float("inf") # start at infinity
     for v in vertices.items(): # look through the vertices for a match
         if eucDist(x, y, v[1][0], v[1][1]) < dist: # search for the closest
             closest = v[0] # analogous to "min"
@@ -67,7 +69,6 @@ if __name__ == "__main__":
     for line in infile: # remove the endline character
         line = line.rstrip() # split the parameters of the csv
         fields = line.split(",")
-    
         type = fields.pop(0) # vertex or edge indicator (hopefully)
 
         if type == "E": # the type is an edge
