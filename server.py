@@ -23,7 +23,8 @@ for line in infile:
         digraphEdges.append((start, stop))
     if type == "V":
         (name, lon, lat) = fields
-        vertices[int(name)] = [float(lon),float(lat)]
+        # multiply by 100000 to turn degrees into 100000ths
+        vertices[int(name)] = [int(float(lon)*100000), int(float(lat)*100000)]
 edmonton = digraph.Digraph(digraphEdges)
 
 def edgecost(e):
@@ -70,6 +71,9 @@ def nearestVertex(x, y):
 while 1:
     trip = input('Awaiting input:').split(" ")
     x1, y1, x2, y2 = trip
-    least_cost_path(edmonton, nearestVertex(x1, y1),
+    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+    path = least_cost_path(edmonton, nearestVertex(x1, y1),
                     nearestVertex(x2, y2), edgecost)
-    
+    print(len(path))
+    for v in path:
+        print(vertices[v])
