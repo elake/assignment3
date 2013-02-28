@@ -48,6 +48,9 @@ def eucDist(x1, y1, x2, y2):
     return cost
 
 def nearestVertex(x, y):
+    '''
+    Finds the vertex nearest the inputted coordinates
+    '''
     dist = float("inf") # start at infinity
     for v in vertices.items(): # look through the vertices for a match
         if eucDist(x, y, v[1][0], v[1][1]) < dist: # search for the closest
@@ -98,4 +101,4 @@ if __name__ == "__main__":
                         nearestVertex(x2, y2), edgecost)
         print(len(path))
         for v in path:
-            print(vertices[v])
+            print(vertices[v][0], vertices[v][1])
