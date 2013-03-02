@@ -41,6 +41,28 @@ def least_cost_path(G, start, dest, cost):
     >>> G = digraph.Digraph([(1, 3), (1, 2), (2, 6), (3, 9), (6, 9)])
     >>> least_cost_path(G, 1, 9, lambda e: e[1] - e[0] + 1)
     [1, 3, 9]
+    >>> G = digraph.Digraph()
+    >>> least_cost_path(G, 1, 21, lambda e: 1) == None
+    True
+    >>> G.add_edge((1, 3))
+    >>> least_cost_path(G, 1, 13, lambda e: 1) == None
+    True
+    >>> least_cost_path(G, 3, 1, lambda e: 1) == None
+    True
+    >>> least_cost_path(G, 1, 3, lambda e: 1)
+    [1, 3]
+    >>> G.add_edge((3, 1))
+    >>> least_cost_path(G, 3, 1, lambda e: 1)
+    [3, 1]
+    >>> G.add_vertex(4)
+    >>> least_cost_path(G, 4, 1, lambda e: 1) == least_cost_path(G, 4, 3, lambda e: 1) == None
+    True
+    >>> G.add_edge((4, 5))
+    >>> least_cost_path(G, 4, 5, lambda e: 1)
+    [4, 5]
+    >>> G.add_edge((5, 1))
+    >>> least_cost_path(G, 4, 1, lambda e: 1)
+    [4, 5, 1]
     '''
     todo = {start: 0}
     parent = {}
@@ -81,6 +103,10 @@ def eucDist(x1, y1, x2, y2):
     0.0
     >>> eucDist(45, 900, 65, 150)
     750.2666192761077
+    >>> {eucDist(i, i, i, i) for i in range(100)} == {0}
+    True
+    >>> {(eucDist(i, i, j, j) == eucDist(j, j, i, i)) for i in range(100) for j in range(100)} == {True}
+    True
     '''
     cost = ((x1-x2)**2 + (y1-y2)**2)**0.5
     return cost
