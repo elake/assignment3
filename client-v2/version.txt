@@ -1,0 +1,6 @@
+This is version 2.1, 2013-03-06
+
+History:
+- fixed the pin assignments and joystick calculations for the more common 
+orientation of screen and joystick.
+- parameterized the spots where screen dimensions are mentioned as 128 x 160
