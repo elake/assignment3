@@ -121,7 +121,7 @@ void draw_path(uint16_t length, coord_t path[]) {
     while ( 0 ) {
 
         // if current and prev points are visible then draw a line
-        tft.drawLine(prev_x, prev_y, cur_x, cur_y, BLUE);
+        // tft.drawLine(prev_x, prev_y, cur_x, cur_y, BLUE);
 
         }
     }
