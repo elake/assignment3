@@ -8,7 +8,7 @@ uint16_t serial_readline(char *line, uint16_t line_size) {
     int bytes_read = 0;    // Number of bytes read from the serial port.
 
     // Read until we hit the maximum length, or a newline.
-    // One less than the maximum length because we want to add a null terminator.
+    // One less than the max length because we want to add a null terminator.
     while (bytes_read < line_size - 1) {
         while (Serial.available() == 0) {
             // There is no data to be read from the serial port.

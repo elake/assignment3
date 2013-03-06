@@ -116,12 +116,28 @@ uint8_t is_coord_visible(coord_t point) {
     return r;
     }
 
-void draw_path(uint16_t length, coord_t path[]) {
+void draw_path(uint16_t length, coord_t path[], char map_num) {
+  coord_t line_from;
+  coord_t line_to;
 
-    while ( 0 ) {
+  int16_t x0;
+  int16_t y0;
 
-        // if current and prev points are visible then draw a line
-        // tft.drawLine(prev_x, prev_y, cur_x, cur_y, BLUE);
+  int16_t x1;
+  int16_t y1;
+  
+  for (int i = 0; i < length - 1; i++) {
+    line_from = path[i];
+    line_to = path[i+1];
+   
+    x0 = longitude_to_x(map_num, line_from.lon) - screen_map_x;
+    y0 = latitude_to_y(map_num, line_from.lat) - screen_map_y;
 
-        }
-    }
+    x1 = longitude_to_x(map_num, line_to.lon) - screen_map_x;
+    y1 = latitude_to_y(map_num, line_to.lat) - screen_map_y;
+
+    draw_line(x0, y0, x1, y1);
+  }
+    // if current and prev points are visible then draw a line
+    // tft.drawLine(prev_x, prev_y, cur_x, cur_y, BLUE);
+}

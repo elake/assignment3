@@ -72,6 +72,7 @@ void move_window_to(int16_t x, int16_t y);
 void move_window(int32_t lon, int32_t lat);
 void move_cursor_to(int16_t x, int16_t y);
 void move_cursor_by(int16_t dx, int16_t dy);
+void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 
 extern volatile uint8_t shared_new_map_num;
 

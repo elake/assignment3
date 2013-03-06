@@ -323,7 +323,7 @@ void loop() {
 
         // Need to redraw any other things that are on the screen
         if ( path_length > 0 ) {
-            draw_path(path_length, path);
+	  draw_path(path_length, path, current_map_num);
             }
 
         // force a redisplay of status message

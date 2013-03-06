@@ -306,3 +306,9 @@ void move_cursor_to(int16_t x, int16_t y) {
     cursor_lat = y_to_latitude(current_map_num, cursor_map_y);
 }
 
+void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
+  // draw a line on the display between x0, y0 and x1, y1
+  tft.drawLine(x0, y0, x1, y1, ST7735_RED);
+  
+}
+
