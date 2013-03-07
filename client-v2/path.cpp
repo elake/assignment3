@@ -197,58 +197,65 @@ OutCode ComputeOutCode(double x, double y)
 void clip_draw(double x0, double y0, double x1, double y1)
 {
       
-        OutCode outcode0 = ComputeOutCode(x0, y0);
-        OutCode outcode1 = ComputeOutCode(x1, y1);
-        bool accept = false;
+  OutCode outcode0 = ComputeOutCode(x0, y0);
+  OutCode outcode1 = ComputeOutCode(x1, y1);
+  bool accept = false;
  
-        while (true) {
-                if (!(outcode0 | outcode1)) { // Bitwise
-                        accept = true;
-                        break;
-                } else if (outcode0 & outcode1) { // Bit
-		  tft.fillRect(0, 75, 25, 125, GREEN);
-                        break;
+  while (true) {
+    if (!(outcode0 | outcode1)) { // Bitwise
+      accept = true;
+      break;
+    } 
+    else if (outcode0 & outcode1) { // Bit
+      if (0) {
+	tft.fillRect(0, 75, 25, 125, GREEN);
+      }
+      break;
       
-                } else {
-                        // failed both tests, so calcula
-                        // from an outside point to an i
-                        double x, y;
+    } else {
+      // failed both tests, so calcula
+      // from an outside point to an i
+      double x, y;
  
-                        // At least one endpoint is outs
-                        OutCode outcodeOut = outcode0 ? outcode0 : outcode1;
+      // At least one endpoint is outs
+      OutCode outcodeOut = outcode0 ? outcode0 : outcode1;
  
-                        // Now find the intersection point;
-                        // use formulas y = y0 + slope *
-                        if (outcodeOut & TOP) {         
-                                x = x0 + (x1 - x0) * (ymax - y0) / (y1 - y0);
-                                y = ymax;
-                        } else if (outcodeOut & BOTTOM) {
-                                x = x0 + (x1 - x0) * (ymin - y0) / (y1 - y0);
-                                y = ymin;
-                        } else if (outcodeOut & RIGHT) { 
-                                y = y0 + (y1 - y0) * (xmax - x0) / (x1 - x0);
-                                x = xmax;
-                        } else if (outcodeOut & LEFT) {  
-                                y = y0 + (y1 - y0) * (xmin - x0) / (x1 - x0);
-                                x = xmin;
-                        }
+      // Now find the intersection point;
+      // use formulas y = y0 + slope *
+      if (outcodeOut & TOP) {         
+	x = x0 + (x1 - x0) * (ymax - y0) / (y1 - y0);
+	y = ymax;
+      } 
+      else if (outcodeOut & BOTTOM) {
+	x = x0 + (x1 - x0) * (ymin - y0) / (y1 - y0);
+	y = ymin;
+      }
+      else if (outcodeOut & RIGHT) { 
+	y = y0 + (y1 - y0) * (xmax - x0) / (x1 - x0);
+	x = xmax;
+      }
+      else if (outcodeOut & LEFT) {  
+	y = y0 + (y1 - y0) * (xmin - x0) / (x1 - x0);
+	x = xmin;
+      }
  
-                        // Now we move outside point to i
-                        // and get ready for next pass.
-                        if (outcodeOut == outcode0) {
-                                x0 = x;
-                                y0 = y;
-                                outcode0 = ComputeOutCode(x0, y0);
-                        } else {
-                                x1 = x;
-                                y1 = y;
-                                outcode1 = ComputeOutCode(x1, y1);
-                        }
-                }
-        }
-        if (accept) {
-               // Following functions are left for implem
-               // their platform (OpenGL/graphics.h etc.)
-               draw_line(x0, y0, x1, y1);
-        }
+      // Now we move outside point to i
+      // and get ready for next pass.
+      if (outcodeOut == outcode0) {
+	x0 = x;
+	y0 = y;
+	outcode0 = ComputeOutCode(x0, y0);
+      }
+      else {
+	x1 = x;
+	y1 = y;
+	outcode1 = ComputeOutCode(x1, y1);
+      }
+    }
+  }
+  if (accept) {
+    // Following functions are left for implem
+    // their platform (OpenGL/graphics.h etc.)
+    draw_line(x0, y0, x1, y1);
+  }
 }

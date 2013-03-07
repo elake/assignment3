@@ -29,7 +29,7 @@
 extern Adafruit_ST7735 tft;
 
 // the number of the current map being displayed
-uint8_t current_map_num;
+int8_t current_map_num;
 
 // the size of the map display window
 const uint16_t display_window_width = 128;
@@ -308,6 +308,16 @@ void move_cursor_to(int16_t x, int16_t y) {
 
 void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
   // draw a line on the display between x0, y0 and x1, y1
+  /*
+    this proves no lines are being drawn off the screen!
+
+    if (x0 > 128 || x0 < 0 || y0 > 148 || y0 < 0 || 
+      x1 > 128 || x1 < 0 || y1 > 148 || y1 < 0) {
+      tft.drawRect(0, 25, 75, 125, ST7735_RED);
+      while(1){}
+    }
+
+  */
   tft.drawLine(x0, y0, x1, y1, ST7735_RED);
   
 }
