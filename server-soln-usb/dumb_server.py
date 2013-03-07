@@ -26,10 +26,11 @@ def main():
     idx = 0
     while True:
         msg = receive(serial_in)
-        lines = server2.handle_client(msg)
-        send(serial_out, str(len(lines)))
-        for v in lines:
-            send(serial_out, str(v))
+        if len(msg.split(" ")) == 4: #Don't process junk data
+            lines = server2.handle_client(msg)
+            send(serial_out, str(len(lines)))
+            for v in lines:
+                send(serial_out, str(v))
 def send(serial_port, message):
     """
     Sends a message back to the client device.
