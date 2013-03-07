@@ -57,6 +57,7 @@ uint8_t first_time;
 void setup() {
     Serial.begin(9600);
     Serial.println("Starting...");
+    delay(500);
     Serial.flush();    // There can be nasty leftover bits.
 
     initialize_screen();

@@ -24,11 +24,8 @@ def main():
         debug = False
 
     idx = 0
-    time.sleep(5)
-    temp = receive(serial_in)
     while True:
         msg = receive(serial_in)
-        print(msg)
         lines = server2.handle_client(msg)
         send(serial_out, str(len(lines)))
         for v in lines:

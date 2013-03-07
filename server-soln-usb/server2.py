@@ -89,7 +89,7 @@ def least_cost_path(G, start, dest, cost):
         return path
 
     else: # we did not find dest in our search, return None as specified
-        return None     
+        return []     
 
 def eucDist(x1, y1, x2, y2):
     '''
