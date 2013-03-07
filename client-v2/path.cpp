@@ -6,7 +6,7 @@
 #include "map.h"
 #include "serial_handling.h"
 
-#define DEBUG_PATH
+#define DEBUG_PATH6
 
 /* path routine error code
    0 no error
@@ -45,8 +45,8 @@ uint8_t read_path(uint16_t *length_p, coord_t *path_p[]) {
     uint16_t max_path_size = (AVAIL_MEM - 256) / sizeof(coord_t);
 
     #ifdef DEBUG_PATH
-        Serial.print("Max path length ");
-        Serial.println(max_path_size);
+    //Serial.print("Max path length ");
+    //Serial.println(max_path_size);
     #endif
 
     bytes_read = serial_readline(line, line_size);

@@ -67,9 +67,9 @@ def least_cost_path(G, start, dest, cost):
     todo = {start: 0}
     parent = {}
     visited = set()
-    # Return none if start or dest cannot be found
+    # Return empty list if start or dest cannot be found
     if start not in G.vertices() or dest not in G.vertices():
-        return None
+        return []
     while todo and dest not in visited:
         cur = min(todo, key=todo.get)
         c = todo[cur]
@@ -163,6 +163,14 @@ our_path = least_cost_path(edmonton, nearestVertex(5365488, -11333914),
                 nearestVertex(5364727, -11335890), cost_distance)
 if correct_path != our_path:
     print("Example path failed!")
+
+def handle_client(request):
+    trip = request.split(" ")
+    x1, y1, x2, y2 = trip
+    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+    path = least_cost_path(edmonton, nearestVertex(x1, y1),
+                           nearestVertex(x2, y2), cost_distance)
+    return path
 
 if __name__ == "__main__":
     # Code for processing route finding requests here

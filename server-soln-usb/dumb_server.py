@@ -1,6 +1,8 @@
 import sys
 import serial
 import argparse
+import server2
+import time
 
 global debug
 debug = False
@@ -14,7 +16,7 @@ def main():
         serial_out = serial_in =  serial.Serial(args.serialport, 9600)
     else:
         print("No serial port.  Supply one with the -s port option")
-        exit()
+        sys.exit()
 
     if args.verbose:
         debug = True
@@ -22,19 +24,15 @@ def main():
         debug = False
 
     idx = 0
+    time.sleep(5)
+    temp = receive(serial_in)
     while True:
         msg = receive(serial_in)
-
-        debug and print("GOT:" + msg + ":", file=sys.stderr)
-
-        fields = msg.split(" ");
-
-        if len(fields) == 4:
-            send(serial_out, "2")
-            send(serial_out, fields[0]+" "+fields[1])
-            send(serial_out, fields[2]+" "+fields[3])
-        idx += 1
-
+        print(msg)
+        lines = server2.handle_client(msg)
+        send(serial_out, str(len(lines)))
+        for v in lines:
+            send(serial_out, str(v))
 def send(serial_port, message):
     """
     Sends a message back to the client device.
