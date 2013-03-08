@@ -29,7 +29,7 @@
 extern Adafruit_ST7735 tft;
 
 // the number of the current map being displayed
-int8_t current_map_num;
+uint8_t current_map_num;
 
 // the size of the map display window
 const uint16_t display_window_width = 128;
@@ -286,7 +286,7 @@ void move_window_to(int16_t x, int16_t y) {
     screen_map_x = constrain(x, 0, 
         map_x_limit[current_map_num] - display_window_width);
     screen_map_y = constrain(y, 0, 
-        map_y_limit[current_map_num] - display_window_height);
+		     map_y_limit[current_map_num] - display_window_height);
 }
 
 void move_cursor_by(int16_t dx, int16_t dy) {
@@ -307,7 +307,7 @@ void move_cursor_to(int16_t x, int16_t y) {
 }
 
 void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
-  // draw a line on the display between x0, y0 and x1, y1
+
   /*
     this proves no lines are being drawn off the screen!
 
@@ -318,6 +318,7 @@ void draw_line(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
     }
 
   */
+  // draw a line on the display between x0, y0 and x1, y1 using the TFT display
   tft.drawLine(x0, y0, x1, y1, ST7735_RED);
   
 }

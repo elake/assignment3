@@ -126,39 +126,41 @@ void draw_path(uint16_t length, coord_t path[], char map_num) {
 
   int16_t x1;
   int16_t y1;
-  
+
   for (int i = 0; i < length - 1; i++) {
+    // unpack the path line-by-line and draw each line segment given by the
+    // x and y coordinates of the lines
     line_from = path[i];
     line_to = path[i+1];
    
+    // subtract the current screen map values from the lat/lon conversions:
     x0 = longitude_to_x(map_num, line_from.lon) - screen_map_x;
     y0 = latitude_to_y(map_num, line_from.lat) - screen_map_y;
 
     x1 = longitude_to_x(map_num, line_to.lon) - screen_map_x;
     y1 = latitude_to_y(map_num, line_to.lat) - screen_map_y;
 
-    if (box_contains(x0, y0) && box_contains(x1, y1)) {
-      draw_line(x0, y0, x1, y1);
-    }
-    else {
-      clip_draw(x0, y0, x1, y1);
-    }
+    // use the clip draw procedure below
+    clip_draw(x0, y0, x1, y1);
+
   }
-    // if current and prev points are visible then draw a line
-    // tft.drawLine(prev_x, prev_y, cur_x, cur_y, BLUE);
 }
 
-int box_contains(int16_t x0, int16_t y0)
-{
-  // globals: display_window_height, display_window_width, msg_window_height
-  return (x0 >= 0 && x0 <= 120) && 
-    (y0 >= 0 && y0 <= (148));
-}
-
-const int xmin = 0;
+// procedure for clip drawing that we for some reason implemented below:
+// screen pixel sizes:
+const int xmin = 0; 
 const int xmax = 128;
 const int ymin = 0;
 const int ymax = 148;
+
+/*
+Cohen-Sutherland clipping algorithm, taken and modified from:
+http://en.wikipedia.org/wiki/Cohen-Sutherland
+under revision history prior to the algorithm being mysteriously dismantled on
+February 27th, 2013. Comments on the function can be found on the wikipedia
+version of the algorithm, but they were removed here as they did not conform
+to standard coding practices.
+*/
 
 typedef int OutCode;
 
@@ -172,7 +174,6 @@ const int TOP = 8;    // 1000
 // bounded diagonally by (xmin, ymin), and (xmax, ymax)
  
 // ASSUME THAT xmax, xmin, ymax and ymin are global constants.
- 
 OutCode ComputeOutCode(double x, double y)
 {
         OutCode code;
@@ -202,26 +203,19 @@ void clip_draw(double x0, double y0, double x1, double y1)
   bool accept = false;
  
   while (true) {
-    if (!(outcode0 | outcode1)) { // Bitwise
+    if (!(outcode0 | outcode1)) { 
       accept = true;
       break;
     } 
-    else if (outcode0 & outcode1) { // Bit
-      if (0) {
-	tft.fillRect(0, 75, 25, 125, GREEN);
-      }
+    else if (outcode0 & outcode1) { 
       break;
       
     } else {
-      // failed both tests, so calcula
-      // from an outside point to an i
       double x, y;
  
-      // At least one endpoint is outs
       OutCode outcodeOut = outcode0 ? outcode0 : outcode1;
  
       // Now find the intersection point;
-      // use formulas y = y0 + slope *
       if (outcodeOut & TOP) {         
 	x = x0 + (x1 - x0) * (ymax - y0) / (y1 - y0);
 	y = ymax;
@@ -239,8 +233,6 @@ void clip_draw(double x0, double y0, double x1, double y1)
 	x = xmin;
       }
  
-      // Now we move outside point to i
-      // and get ready for next pass.
       if (outcodeOut == outcode0) {
 	x0 = x;
 	y0 = y;
@@ -254,8 +246,7 @@ void clip_draw(double x0, double y0, double x1, double y1)
     }
   }
   if (accept) {
-    // Following functions are left for implem
-    // their platform (OpenGL/graphics.h etc.)
+    // now draw line using the map's implementation of draw
     draw_line(x0, y0, x1, y1);
   }
 }

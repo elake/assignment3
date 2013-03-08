@@ -25,12 +25,13 @@ def main():
 
     idx = 0
     while True:
-        msg = receive(serial_in)
+        msg = receive(serial_in) # get the message coming in on the serial port
         if len(msg.split(" ")) == 4: #Don't process junk data
-            lines = server2.handle_client(msg)
-            send(serial_out, str(len(lines)))
-            for v in lines:
+            lines = server2.handle_client(msg) # process the message
+            send(serial_out, str(len(lines)))  # send the length of the path
+            for v in lines: # send the path line by line
                 send(serial_out, str(v))
+
 def send(serial_port, message):
     """
     Sends a message back to the client device.

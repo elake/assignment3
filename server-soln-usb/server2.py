@@ -165,19 +165,22 @@ if correct_path != our_path:
     print("Example path failed!")
 
 def handle_client(request):
-    trip = request.split(" ")
-    x1, y1, x2, y2 = trip
-    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+    trip = request.split(" ") 
+    x1, y1, x2, y2 = trip # get the coords from the incoming request
+    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2) # convert to ints
+
     path = least_cost_path(edmonton, nearestVertex(x1, y1),
-                           nearestVertex(x2, y2), cost_distance)
-    lines = []
+                           nearestVertex(x2, y2), cost_distance) # find path
+    # convert the path into a list:
+    lines = [] 
     for v in path:
             lines.append(str(vertices[v][0])+" "+str(vertices[v][1]))
-    print(len(lines))
+    
+    # print(len(lines)) # for testing
     return lines
 
+# for manually manipulating the server:
 if __name__ == "__main__":
-    # Code for processing route finding requests here
     while 1: # continuously wait for input
         trip = input('Awaiting input:').split(" ")
         x1, y1, x2, y2 = trip
@@ -187,3 +190,4 @@ if __name__ == "__main__":
         print(len(path))
         for v in path:
             print(vertices[v][0], vertices[v][1])
+    

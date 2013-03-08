@@ -178,6 +178,12 @@ void loop() {
     // the joystick routine filters out small changes, so anything non-0
     // is a real movement
     if ( abs(dx) > 0 || abs(dy) > 0 ) {
+        // redraw the path if the cursor moves: (brute force yay)
+        // comment out if you find it runs too slowly, and live with the
+        // cursor erasing the path
+        if ( path_length > 0 ) {
+	  draw_path(path_length, path, current_map_num);
+        }
         // Is the cursor getting near the edge of the screen?  If so
         // then scroll the map over by re-centering the window.
 
@@ -193,25 +199,30 @@ void loop() {
 
             if ( cursor_screen_x < screen_left_margin ) {
                 new_screen_map_x = screen_map_x - screen_scroll_delta;
+		move_cursor_by(3, 0);
                 need_to_move = 1;
                 }
             else if ( cursor_screen_x > screen_right_margin ) {
                 new_screen_map_x = screen_map_x + screen_scroll_delta;
+		move_cursor_by(-3, 0);
                 need_to_move = 1;
             }
 
             if ( cursor_screen_y < screen_top_margin ) {
                 new_screen_map_y = screen_map_y - screen_scroll_delta;
+		move_cursor_by(0, 3);
                 need_to_move = 1;
                 }
             else if ( cursor_screen_y > screen_bottom_margin ) {
                 new_screen_map_y = screen_map_y + screen_scroll_delta;
+		move_cursor_by(0, -3);
                 need_to_move = 1;
             }
 
             if ( need_to_move ) {
                 // move the display window, leaving cursor at same lat-lon
-                move_window_to(new_screen_map_x, new_screen_map_y);
+	        move_window_to(new_screen_map_x, new_screen_map_y);
+		
                 update_display_window = 1;
                 } 
             else {
@@ -319,6 +330,7 @@ void loop() {
             Serial.println();
         #endif
 
+	    
         draw_map_screen();
         draw_cursor();
 
